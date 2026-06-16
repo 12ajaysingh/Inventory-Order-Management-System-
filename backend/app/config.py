@@ -7,8 +7,7 @@ class Settings(BaseSettings):
     database_url: str = "postgresql://inventory_user:inventory_pass@localhost:5432/inventory_db"
     backend_host: str = "0.0.0.0"
     backend_port: int = 8000
-    cors_origins: str = "http://localhost:5173,http://localhost:3000,https://inventory-order-management-system-h177n81li.vercel.app"
-
+    cors_origins: str = "http://localhost:5173,http://localhost:3000,https://inventory-order-management-system-taupe.vercel.app,https://inventory-order-management-system-h177n81li.vercel.app"
     @property
     def cors_origin_list(self) -> list[str]:
         return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
