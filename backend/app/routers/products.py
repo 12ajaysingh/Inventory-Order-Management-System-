@@ -80,11 +80,22 @@ def update_product(product_id: int, payload: ProductUpdate, db: Session = Depend
 @router.delete("/{product_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_product(product_id: int, db: Session = Depends(get_db)):
     product = db.get(Product, product_id)
+
     if not product:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Product not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Product not found"
+        )
+
     if product.order_items:
-    for item in product.order_items:
-        db.delete(item)
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Cannot delete product with existing orders"
+        )
+
+    for log in product.inventory_logs:
+        db.delete(log)
+
     db.delete(product)
     db.commit()
 
