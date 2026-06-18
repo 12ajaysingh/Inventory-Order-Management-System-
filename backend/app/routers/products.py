@@ -83,10 +83,8 @@ def delete_product(product_id: int, db: Session = Depends(get_db)):
     if not product:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Product not found")
     if product.order_items:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Cannot delete product with existing orders",
-        )
+    for item in product.order_items:
+        db.delete(item)
     db.delete(product)
     db.commit()
 
